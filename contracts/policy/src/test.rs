@@ -1,12 +1,13 @@
 use astroid_shared::errors::Error;
+use astroid_shared::errors::Error;
 use soroban_sdk::{
     testutils::{Address as _, Events, Ledger},
     Address, BytesN, Env, IntoVal, String, Symbol, Val,
 };
 
 use crate::{
-    PolicyContract, PolicyContractClient, RuleNode, RuleOp, RuleTree, TransactionPayload,
-    MAX_POLICY_RULES,
+    PolicyContract, PolicyContractClient, RuleNode, RuleOp, RuleStrategy, RuleTree,
+    TransactionPayload, MAX_POLICY_RULES,
 };
 
 /// Assert that the canonical `ContractEvent` with the given variant symbol was
@@ -33,6 +34,7 @@ fn setup<'a>(env: &Env, owner: &Address) -> PolicyContractClient<'a> {
         &None,
         &None,
         &0,
+        &RuleStrategy::All,
     );
     client
 }
@@ -86,6 +88,7 @@ fn allowlist_recipient_enforced() {
         &Some(allowed.clone()),
         &None,
         &0,
+        &RuleStrategy::All,
     );
 
     // Allowed recipient passes
@@ -585,6 +588,7 @@ fn allowance_setup<'a>(env: &'a Env, owner: &Address) -> PolicyContractClient<'a
         &None,
         &None,
         &0,
+        &RuleStrategy::All,
     );
     client
 }
@@ -791,6 +795,7 @@ fn composite_setup<'a>(env: &'a Env, owner: &Address) -> PolicyContractClient<'a
         &None,
         &None,
         &0,
+        &RuleStrategy::All,
     );
     client
 }
@@ -1746,6 +1751,7 @@ fn blacklist_is_scoped_to_its_policy() {
         &None,
         &None,
         &0,
+        &RuleStrategy::All,
     );
     let asset = Address::generate(&env);
     let recip = Address::generate(&env);
@@ -2320,6 +2326,7 @@ fn multi_rule_stack_is_scoped_to_its_policy() {
         &None,
         &None,
         &0,
+        &RuleStrategy::All,
     );
     let asset = Address::generate(&env);
     let recip = Address::generate(&env);
